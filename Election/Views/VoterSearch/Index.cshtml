@@ -31,10 +31,18 @@
             </select>
         </div>
         <div class="col-md-3">
+            <label>حالة الحضور</label>
+            <select id="AttendFilter" class="form-control">
+                <option value="">-- الكل  --</option>
+                <option value="1"> تم الحضور </option>
+                <option value="2"> لم يتم الحضور </option>
+            </select>
+        </div>
+        <div class="col-md-3">
             <label>رقم اللجنة الفرعية </label>
             <input id="Subcommittee" class="form-control" placeholder="ادخل رقم اللجنة الفرعية" />
         </div>
-        <div class="col-md-9">
+        <div class="col-md-6">
             <label>اسم الناخب</label>
             <input id="name" class="form-control" placeholder="ادخل اسم الناخب" />
         </div>
@@ -113,6 +121,7 @@ $(document).ready(function () {
                 d.school = $('#school').val();
                 d.name = $('#name').val();
                 d.Subcommittee = $('#Subcommittee').val();
+                d.AttendFilter = $('#AttendFilter').val();
             }
         },
         lengthMenu: [10, 25, 50, 100],
@@ -256,73 +265,78 @@ $(document).ready(function () {
     });
     </script>
     <script>
-        // 🖨️ زر الطباعة داخل المودال
-        $('#btnPrintVoter').on('click', function () {
-            var printContents = document.getElementById('modalContent').innerHTML;
+    // نخزن المسار الكامل من السيرفر
+    var logoUrl = '@Url.Content("~/assets/images/LogoElection.png")';
+    // 🖨️ زر الطباعة داخل المودال
+    $('#btnPrintVoter').on('click', function () {
+        var printContents = document.getElementById('modalContent').innerHTML;
+        var printWindow = window.open('', '', 'width=400,height=600');
+        var now = new Date();
+        var formattedDate = now.toLocaleString('ar-EG');
 
-            // إنشاء نافذة الطباعة
-            var printWindow = window.open('', '', 'width=400,height=600');
-            var now = new Date();
-            var formattedDate = now.toLocaleString('ar-EG');
+        printWindow.document.write(`
+            <html dir="rtl" lang="ar">
+            <head>
+                <title>طباعة بيانات الناخب</title>
+                <style>
+                    body {
+                        font-family: 'Tahoma', sans-serif;
+                        text-align: center;
+                        direction: rtl;
+                        width: 80mm; /* عرض رول الطباعة */
+                        margin: 0 auto;
+                    }
+                    .logo {
+                        text-align: center;
+                        margin-bottom: 10px;
+                    }
+                    .logo img {
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 50%;
+                    }
+                    h2 {
+                        margin: 5px 0;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 14px;
+                        margin-top: 10px;
+                    }
+                    td, th {
+                        padding: 6px;
+                        border: 1px dashed #999;
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        font-size: 13px;
+                        border-top: 1px solid #ddd;
+                        padding-top: 10px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="logo">
+                    <img src="${logoUrl}" alt="شعار المرشح" />
+                </div>
+                <h2>بطاقة بيانات الناخب</h2>
+                ${printContents}
+                <div class="footer">
+                    <div>${formattedDate}</div>
+                </div>
+            </body>
+            </html>
+        `);
 
-            printWindow.document.write(`
-        <html dir="rtl" lang="ar">
-        <head>
-            <style>
-                body {
-                    font-family: 'Tahoma', sans-serif;
-                    text-align: center;
-                    direction: rtl;
-                    width: 80mm; /* عرض رول الطباعة */
-                    margin: 0 auto;
-                }
-                .logo {
-                    text-align: center;
-                    margin-bottom: 10px;
-                }
-                .logo img {
-                    width: 70px;
-                    height: 70px;
-                    border-radius: 50%;
-                }
-                h2 {
-                    margin: 5px 0;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 14px;
-                    margin-top: 10px;
-                }
-                td, th {
-                    padding: 6px;
-                    border: 1px dashed #999;
-                }
-                .footer {
-                    margin-top: 20px;
-                    font-size: 13px;
-                    border-top: 1px solid #ddd;
-                    padding-top: 10px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="logo">
-                <img src="@Url.Content("~/assets/images/users/avatar-1.jpg")" alt="شعار المرشح" />
-            </div>
-            <h2>بطاقة بيانات الناخب</h2>
-            ${printContents}
-            <div class="footer">
-                <div> ${formattedDate}</div>
-            </div>
-        </body>
-        </html>
-    `);
+        printWindow.document.close();
 
-            printWindow.document.close();
+        // تأكد أن الصورة تتحمل قبل الطباعة
+        printWindow.onload = function () {
             printWindow.focus();
             printWindow.print();
-        });
-
+            printWindow.close();
+        };
+    });
     </script>
 }

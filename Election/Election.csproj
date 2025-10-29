@@ -234,6 +234,7 @@
     <Content Include="assets\images\flags\us.jpg" />
     <Content Include="assets\images\giftbox.png" />
     <Content Include="assets\images\logo-sm.svg" />
+    <Content Include="assets\images\LogoElection.png" />
     <Content Include="assets\images\logomaain.png" />
     <Content Include="assets\images\noimage.jpg" />
     <Content Include="assets\images\small\img-1.jpg" />

@@ -31,7 +31,8 @@ namespace Election.Controllers
             var filterSchool = Request.Form["school"] ?? string.Empty;
             var filterName = Request.Form["name"] ?? string.Empty;
             var filterSubcommittee = Request.Form["Subcommittee"] ?? string.Empty;
-           
+            var AttendFilter = Request.Form["AttendFilter"] ?? string.Empty;
+
             var query = db.VoterInfoes.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filterCenter))
@@ -44,10 +45,19 @@ namespace Election.Controllers
                 query = query.Where(v => v.School == filterSchool);
 
             if (!string.IsNullOrWhiteSpace(filterName))
-                query = query.Where(v => v.Name.Contains(filterName)); 
-            
+                query = query.Where(v => v.Name.Contains(filterName));
+
             if (!string.IsNullOrWhiteSpace(filterSubcommittee))
                 query = query.Where(v => v.SubCommitteeNumber.Contains(filterSubcommittee));
+
+            if (!string.IsNullOrWhiteSpace(AttendFilter))
+            {
+                if (AttendFilter == "1")
+                    query = query.Where(v => v.IsAttent);
+                else if (AttendFilter == "2")
+                    query = query.Where(v =>! v.IsAttent);
+
+            }
 
             if (!string.IsNullOrWhiteSpace(searchValue))
             {
@@ -61,24 +71,25 @@ namespace Election.Controllers
             var recordsTotal = db.VoterInfoes.Count();
             var recordsFiltered = query.Count();
 
-    
+
             query = query.OrderBy(v => v.Name);
 
-       
+
             var data = query.Skip(start).Take(length)
-                .Select(v => new {
+                .Select(v => new
+                {
                     v.Id,
                     v.Serial,
                     v.Name,
                     v.Center,
                     v.Village,
                     v.School,
-                    Subcommittee= v.SubCommitteeNumber,
-                    Attent=v.IsAttent?"تم الحضور":"لم يتم الحضور"
+                    Subcommittee = v.SubCommitteeNumber,
+                    Attent = v.IsAttent ? "تم الحضور" : "لم يتم الحضور"
                 })
                 .ToList();
 
-   
+
             return Json(new
             {
                 draw = draw,
