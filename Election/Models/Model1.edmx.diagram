@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="40e25e1bcb4d4b49834ff29018450b8a" Name="Diagram1">
+        <EntityTypeShape EntityType="ElectionsDbModel.Candidate" Width="1.5" PointX="5.75" PointY="1.125" />
+        <EntityTypeShape EntityType="ElectionsDbModel.CandidatesStatistic" Width="1.5" PointX="8" PointY="0.875" />
+        <EntityTypeShape EntityType="ElectionsDbModel.User" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="ElectionsDbModel.VoterInfo" Width="1.5" PointX="3" PointY="1" />
+        <AssociationConnector Association="ElectionsDbModel.FK_CandidatesStatistics_Candidates" />
+        <AssociationConnector Association="ElectionsDbModel.FK_VoterInfo_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

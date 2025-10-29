@@ -1,0 +1,21 @@
+﻿@if (TempData["warning"] != null)
+{
+    <script>
+        invokeAlert('@TempData["warning"]', '', 'warning', 2000);
+    </script>
+    TempData["warning"] = null;
+}
+@if (TempData["success"] != null)
+{
+    <script>
+        invokeAlert('@TempData["success"]', '', 'success', 3000);
+    </script>
+    TempData["success"] = null;
+}
+@if (TempData["danger"] != null)
+{
+    <script>
+        invokeAlert('@TempData["danger"]', '', 'danger', 2000);
+    </script>
+    TempData["danger"] = null;
+}

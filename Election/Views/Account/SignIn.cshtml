@@ -1,0 +1,139 @@
+﻿<!doctype html>
+@model Election.Dto.SignInVM
+@{
+    Layout = null;
+
+
+}
+
+
+<html lang="en" dir="rtl">
+
+<head>
+    <base href="../../../../">
+    <meta charset="utf-8" />
+    <title>تسجيل الدخول </title>
+    <meta name="description" content="Login page example" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/Assets/media/logos/favicon.ico" />
+
+    <!-- preloader css -->
+    <link rel="stylesheet" href="~/assets/css/preloader.min.css" type="text/css" />
+
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/bootstrap-rtl.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/assets/css/app-rtl.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/vts-rtl-style.css" rel="stylesheet" />
+
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body id="kt_body">
+
+    <div class="auth-page">
+        <div class="container-fluid auth-bg p-0">
+            <div class="bg-overlay bg-primary"></div>
+            <ul class="bg-bubbles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="row g-0">
+                <div class="col-4"></div>
+                <div class="col-xxl-4 col-lg-4">
+                    <div class="auth-full-page-content d-flex p-sm-5 p-4">
+                        <div class="w-100" style="background-color:white; border-radius:7%;">
+                            <div class="d-flex flex-column">
+                                <div class="mb-4 mb-md-5 text-center">
+                                    <a href="#" class="d-block auth-logo" style="margin-top:20px;">
+                                        <img src="~/assets/img/logo.png" alt="" style="max-height:100px;" />
+                                    </a>
+                                </div>
+
+                                <div class="auth-content my-auto" id="loginDiv">
+                                    <div class="text-center">
+                                        <h5 class="mb-3 din-bold">تسجيل الدخول</h5>
+                                        <p class="text-muted mt-2 din-med">أدخل التفاصيل الخاصة بك لتسجيل الدخول إلى حسابك</p>
+
+                                    </div>
+
+                                    <form id="kt_login_signin_form" runat="server" action="/Account/SignIn" method="post" class="mt-4 pt-2" style="padding-left:20px; padding-right:20px;">
+                                        <div class="mb-3">
+                                            <label class="form-label din-bold">اسم المستخدم</label>
+                                            <input type="text" class="form-control din-med" id="userName" name="userName" placeholder="اسم المستخدم" style="text-align:right;">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-start">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-label din-bold">كلمة المرور</label>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="input-group auth-pass-inputgroup">
+                                                <input type="password" class="form-control din-med" placeholder="كلمة المرور" aria-label="Password" aria-describedby="password-addon" style="text-align:right;" id="Password" name="Password">
+
+                                                <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                            </div>
+                                            @*@Html.Hidden("returnUrlVal", "")
+                                                @Html.Hidden("urlLogo", (string)ViewBag.urlLogo)*@
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary w-100 waves-effect waves-light din-bold" type="submit" id="btnLogin">تسجيل دخول</button>
+                                        </div>
+                                    </form>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end auth full page content -->
+                </div>
+                <!-- end col -->
+                <!-- end col -->
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container fluid -->
+    <!-- JAVASCRIPT -->
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/feather-icons/feather.min.js"></script>
+    <!-- pace js -->
+    <script src="~/assets/libs/pace-js/pace.min.js"></script>
+    <!-- password addon init -->
+    <script src="~/assets/js/pages/pass-addon.init.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/js/popupfunctions.js"></script>
+
+    @Html.Partial("_Alerts")
+
+
+
+
+</body>
+
+</html>

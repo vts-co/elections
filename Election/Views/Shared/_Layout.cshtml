@@ -1,0 +1,599 @@
+﻿@{
+    var lang = "ar-EG";
+
+}
+<!doctype html>
+<html lang="en" @(lang != "en" ? "dir=rtl" : "")>
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>   انتخابات| @ViewBag.Title</title>
+    <link rel="shortcut icon" href="~/assetsuser/imgs/logo.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/assets/libs/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/assets/trumbowygEditor/ui/trumbowyg.min.css">
+    <link rel="stylesheet" href="~/assets/trumbowygEditor/plugins/mathml/ui/trumbowyg.mathml.min.css">
+    <link rel="stylesheet" href="~/assets/trumbowygEditor/plugins/specialchars/ui/trumbowyg.specialchars.min.css">
+    <link href="~/assets/plugins/Select2/select2.min.css" rel="stylesheet" />
+
+    <link href="~/assets/css/tree-style.css" rel="stylesheet" />
+    <style>
+        @@font-face {
+            font-family: 'thesansbold';
+            src: url('../../../../assets/fonts/thesans bold.otf') format('opentype');
+        }
+
+        html, body {
+            font-family: thesansbold !important
+        }
+
+        [dir=rtl] input {
+            text-align: start !important;
+        }
+
+        #sidebar-menu ul li ul.sub-menu li a {
+            font-size: 0.78rem !important;
+        }
+
+        #sidebar-menu ul li a i {
+            font-size: 1rem !important;
+            min-width: 1rem !important;
+        }
+    </style>
+
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+    <!-- preloader css -->
+    <link rel="stylesheet" href="~/assets/css/@(lang == "en" ? "preloader.min.css" : "preloader-rtl.min.css")" type="text/css" />
+
+    <!-- Bootstrap Css -->
+    <link href="~/assets/css/@(lang == "en" ? "bootstrap.min.css" : "bootstrap-rtl.min.css")" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/assets/css/@(lang == "en" ? "app.min.css" : "app-rtl.min.css")" id="app-style" rel="stylesheet" type="text/css" />
+
+    @RenderSection("Styles", false)
+</head>
+
+<body>
+
+    <!-- <body data-layout="horizontal"> -->
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <header id="page-topbar">
+            <div class="navbar-header">
+                <div class="d-flex">
+                    <!-- LOGO -->
+                    <div class="navbar-brand-box">
+                        <a href="@Url.Action("Index","Home",new { area ="" })" class="logo logo-dark">
+                            <span class="logo-sm">
+                                <img src="~/assets/images/noimage.jpg" alt="" height="24" />
+                            </span>
+                            <span class="logo-lg">
+                                <img src="~/assets/images/noimage.jpg" alt="" height="24" /> <span class="logo-txt">انتخابات</span>
+                            </span>
+                        </a>
+
+                        <a href="@Url.Action("Index","Home")" class="logo logo-light">
+                            <span class="logo-sm">
+                                <img src="~/assets/images/noimage.jpg" alt="" height="24" />
+                            </span>
+                            <span class="logo-lg">
+                                <img src="~/assets/images/noimage.jpg" alt="" height="24" /> <span class="logo-txt">انتخابات</span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+
+
+                </div>
+
+                <div class="d-flex">
+
+                    <div class="dropdown d-inline-block d-lg-none ms-2">
+                        <button type="button" class="btn header-item" id="page-header-search-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i data-feather="search" class="icon-lg"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                             aria-labelledby="page-header-search-dropdown">
+
+                            <form class="p-3">
+                                <div class="form-group m-0">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder=" ..." aria-label="">
+
+                                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+                    <div class="dropdown d-none d-sm-inline-block">
+                        <button type="button" class="btn header-item" onclick="setdarkmode()" id="mode-setting-btn">
+                            <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                            <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                        </button>
+                    </div>
+
+
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded-circle header-profile-user" alt="User Picture" src="~/assets/images/users/profile.png" onError="this.onerror=null;this.src='../../../assets/images/users/profile.png';">
+                            <span class="d-none d-xl-inline-block ms-1 fw-medium">@TempData["UserName"]</span>
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="@Url.Action("Index","Home")"><i class="bx bx-home font-size-16 align-middle me-1"></i> الرئيسية</a>
+                            <!-- item-->
+                            <a class="dropdown-item" href="@Url.Action("Index","Account")"><i class="bx bx-user font-size-16 align-middle me-1"></i> الملف الشخصي</a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action( "SignOut", "Account")"><i class="bx bx-log-out font-size-16 align-middle me-1"></i> تسجيل الخروج </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+        <!-- ========== Left Sidebar Start ========== -->
+        <!-- Left Sidebar End -->
+        <div class="vertical-menu">
+
+            <div data-simplebar class="h-100">
+
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+                    <!-- Left Menu Start -->
+                    <ul class="metismenu list-unstyled" id="side-menu">
+
+                        <li>
+                            <a href="@Url.Action("Index", "Dashboard")">
+                                <i class="bx bxs-dashboard"></i>
+                                <span data-key="t-dashboard">لوحة التحكم</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
+                                <i class="bx bxs-message"></i>
+                                <span data-key="t-viewreports">الناخبين </span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="@Url.Action("Index", "VoterSearch")"><i class="bx bxs-report"></i>الناخبين </a></li>
+
+                            </ul>
+                        </li>
+                       
+
+                    </ul>
+
+
+                </div>
+                <!-- Sidebar -->
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0 font-size-18">@ViewBag.Title</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+
+                                        <li class="breadcrumb-item active">@ViewBag.Title</li>
+
+
+                                        <li class="breadcrumb-item">@ViewBag.MainPage</li>
+
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    @RenderBody()
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>document.write(new Date().getFullYear())</script> © انتخابات
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Designed & Developed by <a href="https://vts-co.com/" class="text-decoration-underline">VTS</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+    <!-- JAVASCRIPT -->
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/feather-icons/feather.min.js"></script>
+    <!-- pace js -->
+    <script src="~/assets/libs/pace-js/pace.min.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/js/app.js"></script>
+    <script src="~/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="~/assets/plugins/DropDownComboTree/comboTreePlugin.js"></script>
+    <script src="~/assets/js/comboTreePlugin.js"></script>
+
+    <script>
+        var elements = document.getElementsByClassName("searchable");
+        for (var i = 0; i < elements.length; i++) {
+            const choices = new Choices(elements[i], { shouldSort: false });
+        }
+    </script>
+
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+
+
+
+    @if (lang == "en")
+    {
+        <script>
+            $(document).ready(function () {
+                $('#datatable').DataTable();
+                $('.datatable').each(function () { $(this).DataTable(); });
+            });
+        </script>
+    }
+    else
+    {
+
+        <script type="text/javascript">
+            var bulkId = '@TempData["BulkId"]';
+            var b =  '@ViewBag.BulkId';
+    $(document).ready(function () {
+        $('.datatable').DataTable({
+            ordering: false,
+            order: false,
+            language: {
+                search: "بحث:",
+                lengthMenu: "عرض _MENU_ عنصر لكل صفحة",
+                info: "العناصر من _START_ الي _END_ من اصل _TOTAL_ عنصر",
+                processing: "جارى التحميل",
+                zeroRecords: "لا يوجد سجلات لعرضها",
+                infoFiltered: "",
+                infoEmpty: '',
+                paginate: {
+                    first: "الاول",
+                    last: "الاخير",
+                    next: 'التالي',
+                    previous: 'السابق'
+                }
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: '<i class="fa fa-file p-1"></i>نسخ',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-list-alt p-1"></i>نسخة اكسيل',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print p-1"></i>طباعة',
+                    title: '@ViewBag.Title',
+                    className: 'btn btn-default',
+                    autoPrint: true,
+                    action: function (e, dt, button, config) {
+                        if (bulkId && bulkId !== 'null' && bulkId !== '') {
+                            var url = '@Url.Action("PrintAllCards", "CenterCodes")' + '?BulkId=' + bulkId;
+                            window.open(url, '_blank');
+                        }
+                        @*else if(b && b !== 'null' && b !== '') {
+     var url = '@Url.Action("PrintAllCards", "ActivationCodes")' + '?BulkId=' + b;
+     window.open(url, '_blank');
+ }*@
+                        else {
+                            $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
+                        }
+                    },
+                    customize: function (win) {
+                        $(win.document.body).find('th').addClass('display').css('text-align', 'center');
+                        $(win.document.body).find('table').addClass('display').css('font-size', '16px');
+                        $(win.document.body).find('table').addClass('display').css('text-align', 'center');
+                        $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
+                            $(this).css('background-color', '#D0D0D0');
+                        });
+                        $(win.document.body).find('h1').css('text-align', 'center');
+                        $(win.document.body).css('direction', 'rtl');
+                    }
+                }
+            ]
+        });
+
+        $('#datatable').DataTable({
+            ordering: false,
+            order: false,
+            language: {
+                search: "بحث:",
+                lengthMenu: "عرض _MENU_ عنصر لكل صفحة",
+                info: "العناصر من _START_ الي _END_ من اصل _TOTAL_ عنصر",
+                processing: "جارى التحميل",
+                zeroRecords: "لا يوجد سجلات لعرضها",
+                infoFiltered: "",
+                infoEmpty: '',
+                paginate: {
+                    first: "الاول",
+                    last: "الاخير",
+                    next: 'التالي',
+                    previous: 'السابق'
+                }
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: '<i class="fa fa-file p-1"></i>نسخ',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-list-alt p-1"></i>نسخة اكسيل',
+                    className: 'btn btn-default'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print p-1"></i>طباعة',
+                    title: '@ViewBag.Title',
+                    className: 'btn btn-default',
+                    autoPrint: true,
+                    action: function (e, dt, button, config) {
+                        if (bulkId && bulkId !== 'null' && bulkId !== '') {
+                            var url = '@Url.Action("PrintAllCards", "CenterCodes")' + '?BulkId=' + bulkId;
+                            window.open(url, '_blank');
+                        }
+                       @*else if(b && b !== 'null' && b !== '') {
+                            var url = '@Url.Action("PrintAllCards", "ActivationCodes")' + '?BulkId=' + bulkId;
+                            window.open(url, '_blank');
+                        }*@
+
+                        else {
+                            $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
+                        }
+                    },
+                    customize: function (win) {
+                        $(win.document.body).find('th').addClass('display').css('text-align', 'center');
+                        $(win.document.body).find('table').addClass('display').css('font-size', '16px');
+                        $(win.document.body).find('table').addClass('display').css('text-align', 'center');
+                        $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
+                            $(this).css('background-color', '#D0D0D0');
+                        });
+                        $(win.document.body).find('h1').css('text-align', 'center');
+                        $(win.document.body).css('direction', 'rtl');
+                    }
+                }
+            ]
+        });
+
+        $('.datatabletotal').each(function () {
+            var colNum = $(this).data("colnum");
+            $(this).DataTable({
+                ordering: false,
+                order: false,
+                language: {
+                    search: "بحث:",
+                    lengthMenu: "عرض _MENU_ عنصر لكل صفحة",
+                    info: "العناصر من _START_ الي _END_ من اصل _TOTAL_ عنصر",
+                    processing: "جارى التحميل",
+                    zeroRecords: "لا يوجد سجلات لعرضها",
+                    infoFiltered: "",
+                    infoEmpty: 'لا يوجد سجلات متاحه',
+                    paginate: {
+                        first: "الاول",
+                        last: "الاخير",
+                        next: 'التالي',
+                        previous: 'السابق'
+                    }
+                },
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                    };
+
+                    // Total over all pages
+                    total = api
+                        .column(colNum)
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(colNum, { page: 'current' })
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(colNum).footer()).html('الاجمالي ' + pageTotal + ' (الكلي:' + total + ')');
+                }
+            });
+        });
+    });
+        </script>
+
+    }
+
+
+
+
+    <script src="~/assets/trumbowygEditor/trumbowyg.js"></script>
+    <script src="~/assets/trumbowygEditor/trumbowyg.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/emoji/trumbowyg.emoji.js"></script>
+
+
+    <script>window.jQuery || document.write('<script src="~/assets/trumbowygEditor/jquery-3.3.1.min.js"><\/script>')</script>
+    <script src="~/assets/trumbowygEditor/trumbowyg.min.js"></script>
+
+    <script src="~/assets/trumbowygEditor/plugins/base64/trumbowyg.base64.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/cleanpaste/trumbowyg.cleanpaste.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/colors/trumbowyg.colors.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/emoji/trumbowyg.emoji.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/fontfamily/trumbowyg.fontfamily.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/history/trumbowyg.history.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/indent/trumbowyg.indent.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/insertaudio/trumbowyg.insertaudio.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/lineheight/trumbowyg.lineheight.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="~/assets/trumbowygEditor/plugins/mathml/trumbowyg.mathml.min.js"></script>
+
+    <script src="~/assets/trumbowygEditor/plugins/noembed/trumbowyg.noembed.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/pasteembed/trumbowyg.pasteembed.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/pasteimage/trumbowyg.pasteimage.min.js"></script>
+
+    <script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"></script>
+
+
+    <script src="~/assets/trumbowygEditor/plugins/resizimg/trumbowyg.resizimg.min.js"></script>
+    <script src="~/assets/trumbowygEditor/plugins/specialchars/trumbowyg.specialchars.min.js"></script>
+
+
+    <script src="~/assets/plugins/Select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+
+        MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
+
+
+
+        $('.editor').trumbowyg({
+            imageWidthModalEdit: true,
+            btns: [
+                ['foreColor', 'backColor', 'strong', 'em', 'del', 'emoji', 'fontfamily', 'fontsize', 'lineheight'],
+                ['formatting'],
+                ['superscript', 'subscript'],
+                ['indent', 'outdent'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['mathml'],
+                ['insertImage', 'base64', 'insertAudio', 'noembed', 'link'],
+                ['historyUndo', 'historyRedo', 'removeformat'],
+                ['viewHTML', 'fullscreen']
+
+            ],
+            autogrow: true
+        });
+
+        plugins: {
+            color: { allowCustomForeColor: true; }
+        }
+
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+            });
+
+        });
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        function eraseCookie(name) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+        var darkmode = getCookie('darkmode');
+        if (darkmode == 'on') {
+            $('body').attr('data-layout-mode', 'dark');
+            $('body').attr('data-sidebar', 'dark');
+            $('body').attr('data-topbar', 'dark');
+        }
+        function setdarkmode() {
+            if (darkmode == 'on') {
+                setCookie('darkmode', 'off', 120);
+            }
+            else {
+                setCookie('darkmode', 'on', 120);
+            }
+        }
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <script src="~/assets/js/popupfunctions.js"></script>
+
+    @Html.Partial("_Alerts")
+</body>
+</html>
