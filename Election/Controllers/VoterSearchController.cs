@@ -132,5 +132,26 @@ namespace Election.Controllers
             return Json(schools, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult MarkAsAttended(int id)
+        {
+            try
+            {
+                var voter = db.VoterInfoes.FirstOrDefault(v => v.Id == id);
+                if (voter == null)
+                    return Json(new { success = false, message = "الناخب غير موجود" });
+
+                voter.IsAttent = true;
+                db.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
     }
 }

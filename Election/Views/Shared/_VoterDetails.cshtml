@@ -1,6 +1,6 @@
 ﻿@model Election.Models.VoterInfo
 
-<div class="text-start">
+<div class="text-start"  data-voter-id="@Model.Id">
     <table class="table table-bordered">
         <tr><th>الرقم التسلسلي</th><td>@Model.Serial</td></tr>
         <tr><th>الاسم</th><td>@Model.Name</td></tr>
@@ -8,5 +8,9 @@
         <tr><th>القرية</th><td>@Model.Village</td></tr>
         <tr><th>المدرسة</th><td>@Model.School</td></tr>
         <tr><th>اللجنة الفرعية </th><td>@Model.SubCommitteeNumber</td></tr>
+        <tr class="no-print"> <th>الحضور</th><td>@(Model.IsAttent ? "✔️ حضر" : "❌ لم يحضر")</td></tr>
+
     </table>
 </div>
+
+
