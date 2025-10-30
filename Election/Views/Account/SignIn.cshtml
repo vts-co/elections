@@ -31,12 +31,25 @@
     <link href="~/assets/css/vts-rtl-style.css" rel="stylesheet" />
 
     <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .auth-full-page-content {
+            min-height: auto !important; /* إلغاء الطول الكامل */
+            height: auto !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0; /* مسافة بسيطة فقط */
+        }
 
+
+       
+
+    </style>
 </head>
 
 <body id="kt_body">
 
-    <div class="auth-page">
+    <div class="auth-full-page-content">
         <div class="container-fluid auth-bg p-0">
             <div class="bg-overlay bg-primary"></div>
             <ul class="bg-bubbles">
@@ -59,7 +72,7 @@
                             <div class="d-flex flex-column">
                                 <div class="mb-4 mb-md-5 text-center">
                                     <a href="#" class="d-block auth-logo" style="margin-top:20px;">
-                                        <img src="~/assets/img/logo.png" alt="" style="max-height:100px;" />
+                                        <img src="~/assets/images/LogoElection.png" alt="" style="max-height:100px;" />
                                     </a>
                                 </div>
 
@@ -90,7 +103,7 @@
                                                 <button class="btn btn-light shadow-none ms-0" type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                             </div>
                                             @*@Html.Hidden("returnUrlVal", "")
-                                                @Html.Hidden("urlLogo", (string)ViewBag.urlLogo)*@
+                                            @Html.Hidden("urlLogo", (string)ViewBag.urlLogo)*@
 
                                         </div>
 

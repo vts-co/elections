@@ -87,6 +87,7 @@ namespace Election.Controllers
         }
         public ActionResult SignIn()
         {
+            var pass = Security.Encrypt("Ybewfc1654#GFaqw");
 
             return View(new SignInVM());
         }
@@ -129,7 +130,7 @@ namespace Election.Controllers
                     RoleId=user.Id
                 };
                 auth.SaveToCookies(Data);
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Home");
 
             }
 

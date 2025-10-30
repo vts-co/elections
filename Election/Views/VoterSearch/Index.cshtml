@@ -3,79 +3,99 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="">
 
-    <div class="row">
-        <div class="col-md-3">
-            <label>المركز</label>
-            <select id="center" class="form-control">
-                <option value="">-- كل المراكز --</option>
-                @foreach (var c in ViewBag.Centers as List<string>)
-                {
-                    <option value="@c">@c</option>
-                }
-            </select>
-        </div>
 
-        <div class="col-md-3">
-            <label>القرية</label>
-            <select id="village" class="form-control">
-                <option value="">-- كل القرى --</option>
-            </select>
-        </div>
+<div class="card">
+    <div class="card-header">
 
-        <div class="col-md-6">
-            <label>المدرسة</label>
-            <select id="school" class="form-control">
-                <option value="">-- كل المدارس --</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label>حالة الحضور</label>
-            <select id="AttendFilter" class="form-control">
-                <option value="">-- الكل  --</option>
-                <option value="1"> تم الحضور </option>
-                <option value="2"> لم يتم الحضور </option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label>رقم اللجنة الفرعية </label>
-            <input id="Subcommittee" class="form-control" placeholder="ادخل رقم اللجنة الفرعية" />
-        </div>
-        <div class="col-md-6">
-            <label>اسم الناخب</label>
-            <input id="name" class="form-control" placeholder="ادخل اسم الناخب" />
+        <div class="row">
+            <h2 class="col"> @ViewBag.Title </h2>
+            <p class="col-auto">
+            </p>
         </div>
     </div>
-    <div class="row" style="margin-top:10px;">
-        <div class="col-md-12">
-            <button id="btnSearch" class="btn btn-primary w-25" style="float:left;">
-                <i class="fa fa-search me-2"></i> بحث
-            </button>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label>المركز</label>
+                <select id="center" class="form-control">
+                    <option value="">-- كل المراكز --</option>
+                    @foreach (var c in ViewBag.Centers as List<string>)
+                    {
+                        <option value="@c">@c</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label>القرية</label>
+                <select id="village" class="form-control">
+                    <option value="">-- كل القرى --</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label>المدرسة</label>
+                <select id="school" class="form-control">
+                    <option value="">-- كل المدارس --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>حالة الحضور</label>
+                <select id="AttendFilter" class="form-control">
+                    <option value="">-- الكل  --</option>
+                    <option value="1"> تم الحضور </option>
+                    <option value="2"> لم يتم الحضور </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>رقم اللجنة الفرعية </label>
+                <input id="Subcommittee" class="form-control" placeholder="ادخل رقم اللجنة الفرعية" />
+            </div>
+            <div class="col-md-6">
+                <label>اسم الناخب</label>
+                <input id="name" class="form-control" placeholder="ادخل اسم الناخب" />
+            </div>
         </div>
+        <div class="row mt-3">
+            <div class="col-md-12 d-flex justify-content-end">
+                <div class="btn-group" role="group" style="gap: 10px;">
+                    <button id="btnSearch" class="btn btn-primary px-4">
+                        <i class="fa fa-search me-2"></i> بحث
+                    </button>
+
+                    <button id="btnExportExcel" class="btn btn-success px-4">
+                        <i class="fa fa-file-excel-o me-2"></i> تصدير إلى Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <hr />
+
+        <table id="votersTable" class="table table-striped dt-responsive  nowrap w-100 " style="width:100%">
+            <thead>
+                <tr>
+                    <th>المسلسل </th>
+
+                    <th>الاسم</th>
+                    <th>المركز</th>
+                    <th>القرية</th>
+                    <th>المدرسة</th>
+                    <th>اللجنة الفرعية</th>
+                    <th>الحضور</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-
-
-
-    <hr />
-
-    <table id="votersTable" class="table table-striped dt-responsive  nowrap w-100 " style="width:100%">
-        <thead>
-            <tr>
-                <th>المسلسل </th>
-
-                <th>الاسم</th>
-                <th>المركز</th>
-                <th>القرية</th>
-                <th>المدرسة</th>
-                <th>اللجنة الفرعية</th>
-                <th>الحضور</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 </div>
+
 <!-- Modal: تفاصيل الناخب -->
 <!-- Modal: تفاصيل الناخب -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
@@ -270,6 +290,25 @@ $(document).ready(function () {
     });
     </script>
     <script>
+        $('#btnExportExcel').click(function () {
+            var center = $('#center').val();
+            var village = $('#village').val();
+            var school = $('#school').val();
+            var attendFilter = $('#AttendFilter').val();
+            var subcommittee = $('#Subcommittee').val();
+            var name = $('#name').val();
+
+            // نبني رابط الاستيراد
+            var url = '/VoterSearch/ExportToExcel?center=' + encodeURIComponent(center)
+                + '&village=' + encodeURIComponent(village)
+                + '&school=' + encodeURIComponent(school)
+                + '&attendFilter=' + encodeURIComponent(attendFilter)
+                + '&subcommittee=' + encodeURIComponent(subcommittee)
+                + '&name=' + encodeURIComponent(name);
+
+            window.location.href = url; // تحميل الملف مباشرة
+        });
+
     // نخزن المسار الكامل من السيرفر
     var logoUrl = '@Url.Content("~/assets/images/LogoElection.png")';
     // 🖨️ زر الطباعة داخل المودال

@@ -31,6 +31,9 @@
           <Property Name="Password" Type="nvarchar(max)" />
           <Property Name="CreatedOn" Type="datetime" />
           <Property Name="Role" Type="int" />
+          <Property Name="SchoolName" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="VoterInfo">
           <Key>
@@ -131,6 +134,9 @@
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="Role" Type="Int32" />
+          <Property Name="SchoolName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="VoterInfoes" Relationship="ElectionsDbModel.FK_VoterInfo_Users" FromRole="User" ToRole="VoterInfo" />
         </EntityType>
         <EntityType Name="VoterInfo">
@@ -173,7 +179,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -200,6 +206,9 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ElectionsDbModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="Password" ColumnName="Password" />

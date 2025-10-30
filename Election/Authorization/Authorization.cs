@@ -36,15 +36,13 @@ namespace Election.Authorization
 
 
                 var check = auth.LoadDataFromCookies();
-                if (check)
+                if (!check)
                 {
+                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { area = "", controller = "Account", action = "SignIn", returnUrl = filterContext.HttpContext.Request.Url.ToString() }));
 
                 }
-                else
-                {
 
-                }
-            
+
                 filterContext.Controller.TempData["UserInfo"] = auth.CookieValues;
                 filterContext.Controller.TempData["UserId"] = auth.CookieValues.UserId;
                 filterContext.Controller.TempData["PersonId"] = auth.CookieValues.PersonId;

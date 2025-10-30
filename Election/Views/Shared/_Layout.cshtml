@@ -136,9 +136,7 @@
                             <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="@Url.Action("Index","Home")"><i class="bx bx-home font-size-16 align-middle me-1"></i> الرئيسية</a>
-                            <!-- item-->
-                            <a class="dropdown-item" href="@Url.Action("Index","Account")"><i class="bx bx-user font-size-16 align-middle me-1"></i> الملف الشخصي</a>
+
 
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="@Url.Action( "SignOut", "Account")"><i class="bx bx-log-out font-size-16 align-middle me-1"></i> تسجيل الخروج </a>
@@ -168,15 +166,25 @@
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
-                                <i class="bx bxs-message"></i>
-                                <span data-key="t-viewreports">الناخبين </span>
+                                <i class="bx bxs-spreadsheet"></i>                                <span data-key="t-viewreports">الناخبين </span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="@Url.Action("Index", "VoterSearch")"><i class="bx bxs-report"></i>الناخبين </a></li>
+                                <li><a href="@Url.Action("Index", "RptStatistics")"><i class="bx bxs-report"></i>تقرير إحصائيات  الناخبين </a></li>
 
                             </ul>
                         </li>
-                       
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
+                                <i class="bx bxs-group"></i>                                <span data-key="t-Users">المستخدمين </span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="@Url.Action("Index", "Users")"><i class="bx bxs-report"></i>المستخدمين </a></li>
+
+                            </ul>
+                        </li>
+
 
                     </ul>
 
