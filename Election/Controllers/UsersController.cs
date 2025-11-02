@@ -1,4 +1,5 @@
 ﻿using Election.Authorization;
+using Election.Dto;
 using Election.Models;
 using Election.Utilities;
 using System;
@@ -19,7 +20,7 @@ namespace Election.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            var users = db.Users.ToList();
+            var users = db.Users.Where(x=>!x.IsDeleted).ToList();
             return View(users);
         }
 
@@ -71,7 +72,6 @@ namespace Election.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(User user)
         {
           
@@ -87,32 +87,42 @@ namespace Election.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteUser(int id)
+        public JsonResult DeleteUser(int id)
         {
             try
             {
                 var user = db.Users.Find(id);
                 if (user == null)
                 {
-                    TempData["warning"] = "المستخدم غير موجود";
-
-                    return View(user);
-
+                    return Json(new { success = false, message = "المستخدم غير موجود" });
                 }
 
                 user.IsDeleted = true;
                 user.DeletedOn = DALUtility.GetDateTime();
                 db.SaveChanges();
-                TempData["success"] = "تم حذف البيانات بنجاح";
 
-                return RedirectToAction("Index");
+                return Json(new { success = true, message = "تم حذف البيانات بنجاح" });
             }
             catch (Exception ex)
             {
-                TempData["warning"] = "تأكد من ادخال البيانات";
-
-                return RedirectToAction("Index");
+                return Json(new { success = false, message = "حدث خطأ، تأكد من إدخال البيانات" });
             }
+        }
+
+        public ActionResult UserAttendanceReport()
+        {
+            var report = db.VoterInfoes
+                           .Where(v => v.IsAttent && v.AttendBy != null)
+                           .GroupBy(v => v.AttendBy)
+                           .Select(g => new UserVoterAttendanceReportViewModel
+                           {
+                               UserName = db.Users.Where(u => u.Id == g.Key).Select(u => u.UserName).FirstOrDefault(),
+                               AttendedCount = g.Count()
+                           })
+                           .OrderByDescending(x => x.AttendedCount)
+                           .ToList();
+
+            return View(report);
         }
 
     }

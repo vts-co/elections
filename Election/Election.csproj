@@ -185,14 +185,18 @@
     <Compile Include="Authorization\Authorization.cs" />
     <Compile Include="Authorization\VTSAuth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CandidatesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecordingResultsController.cs" />
     <Compile Include="Controllers\RptStatisticsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\VoterSearchController.cs" />
+    <Compile Include="Dto\CandidateDto.cs" />
     <Compile Include="Dto\DashboardReportDto.cs" />
     <Compile Include="Dto\InfoDto.cs" />
     <Compile Include="Dto\SignInVM.cs" />
     <Compile Include="Dto\UserInfo.cs" />
+    <Compile Include="Dto\UserVoterAttendanceReportViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1938,6 +1942,14 @@
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Candidates\Index.cshtml" />
+    <Content Include="Views\Candidates\Create.cshtml" />
+    <Content Include="Views\Candidates\Edit.cshtml" />
+    <Content Include="Views\RecordingResults\Index.cshtml" />
+    <Content Include="Views\RecordingResults\Create.cshtml" />
+    <Content Include="Views\RecordingResults\Edit.cshtml" />
+    <Content Include="Views\RecordingResults\Statistics.cshtml" />
+    <Content Include="Views\Users\UserAttendanceReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

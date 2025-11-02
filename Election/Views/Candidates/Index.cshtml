@@ -1,8 +1,8 @@
-﻿@model IEnumerable<Election.Models.User>
+﻿@model IEnumerable<Election.Models.Candidate>
 @using Election.Utilities
 
 @{
-    ViewBag.Title = "قائمة المستخدمين";
+    ViewBag.Title = "قائمة المرشحين";
 }
 
 
@@ -35,8 +35,7 @@
         <table id="datatable" class="table table-striped dt-responsive  nowrap w-100">
             <thead>
                 <tr>
-                    <th>اسم المستخدم</th>
-                    <th>المدرسة</th>
+                    <th>الاسم </th>
 
                     <th></th>
                 </tr>
@@ -45,21 +44,19 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.UserName</td>
-                        <td>@item.SchoolName</td>
-                        
+                        <td>@item.Name</td>
+
                         <td>
-                            @if (item.Role != 1)
-                            {
+                         
                                 <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-warning">
                                     <i class="fa fa-edit"></i> تعديل
                                 </a>
-                                <button class="btn btn-sm btn-danger btn-delete" data-id="@item.Id" data-name="@item.UserName">
+                                <button class="btn btn-sm btn-danger btn-delete" data-id="@item.Id" data-name="@item.Name">
                                     <i class="fa fa-trash"></i> حذف
                                 </button>
 
 
-                            }
+                            
 
                         </td>
                     </tr>
@@ -77,7 +74,7 @@
 
             Swal.fire({
                 title: 'هل أنت متأكد؟',
-                text: "سيتم حذف المستخدم: " + name,
+                text: "سيتم حذف المرشح: " + name,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -87,7 +84,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/Users/DeleteUser',
+                        url: '/Candidates/Delete',
                         type: 'POST',
                         data: { id: id },
                         success: function (response) {
@@ -95,7 +92,7 @@
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'تم الحذف!',
-                                    text: 'تم حذف المستخدم بنجاح.',
+                                    text: 'تم حذف المرشح بنجاح.',
                                     timer: 1500,
                                     showConfirmButton: false
                                 });

@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="40e25e1bcb4d4b49834ff29018450b8a" Name="Diagram1">
         <EntityTypeShape EntityType="ElectionsDbModel.Candidate" Width="1.5" PointX="5.75" PointY="1.125" />
-        <EntityTypeShape EntityType="ElectionsDbModel.CandidatesStatistic" Width="1.5" PointX="8" PointY="0.875" />
+        <EntityTypeShape EntityType="ElectionsDbModel.CandidatesStatistic" Width="1.5" PointX="8" PointY="1" />
         <EntityTypeShape EntityType="ElectionsDbModel.User" Width="1.5" PointX="0.75" PointY="1.125" />
         <EntityTypeShape EntityType="ElectionsDbModel.VoterInfo" Width="1.5" PointX="3" PointY="1" />
         <AssociationConnector Association="ElectionsDbModel.FK_CandidatesStatistics_Candidates" />

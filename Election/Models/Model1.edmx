@@ -9,23 +9,27 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="CandidatesStatistics">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CandidateId" Type="int" />
           <Property Name="NumberOfVoters" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeName" Type="nvarchar(max)" />
           <Property Name="UserName" Type="nvarchar(max)" />
           <Property Name="Password" Type="nvarchar(max)" />
@@ -110,25 +114,29 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CandidatesStatistics" Relationship="ElectionsDbModel.FK_CandidatesStatistics_Candidates" FromRole="Candidate" ToRole="CandidatesStatistic" />
         </EntityType>
         <EntityType Name="CandidatesStatistic">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CandidateId" Type="Int32" />
           <Property Name="NumberOfVoters" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Candidate" Relationship="ElectionsDbModel.FK_CandidatesStatistics_Candidates" FromRole="CandidatesStatistic" ToRole="Candidate" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmployeeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -188,6 +196,8 @@
           <EntitySetMapping Name="Candidates">
             <EntityTypeMapping TypeName="ElectionsDbModel.Candidate">
               <MappingFragment StoreEntitySet="Candidates">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -196,6 +206,8 @@
           <EntitySetMapping Name="CandidatesStatistics">
             <EntityTypeMapping TypeName="ElectionsDbModel.CandidatesStatistic">
               <MappingFragment StoreEntitySet="CandidatesStatistics">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="NumberOfVoters" ColumnName="NumberOfVoters" />
                 <ScalarProperty Name="CandidateId" ColumnName="CandidateId" />

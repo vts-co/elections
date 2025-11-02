@@ -91,6 +91,7 @@ namespace Election.Controllers
                     v.Center,
                     v.Village,
                     v.School,
+                    IsAttent=v.IsAttent,
                     Subcommittee = v.SubCommitteeNumber,
                     Attent = v.IsAttent ? "تم الحضور" : "لم يتم الحضور"
                 })

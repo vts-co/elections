@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Election.Models.CandidatesStatistic>
+@using Election.Utilities
+
+@{
+    ViewBag.Title = "قائمة المرشحين";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row">
+            <h2 class="col">  </h2>
+            <p class="col-auto">
+                @Url.Create()
+            </p>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="datatable" class="table table-striped dt-responsive  nowrap w-100">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المرشح</th>
+                    <th>عدد الناخبين</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Date.Value.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Candidate.Name</td>
+                        <td>@item.NumberOfVoters</td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-warning">
+                                <i class="fa fa-edit"></i> تعديل
+                            </a>
+                            <button class="btn btn-sm btn-danger btn-delete" data-id="@item.Id" data-name="@item.Candidate.Name">
+                                <i class="fa fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // حذف بالسويت آلار
+            $(document).on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+
+                Swal.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: "سيتم حذف سجل المرشح: " + name,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'نعم، احذف!',
+                    cancelButtonText: 'إلغاء'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("Delete")',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'تم الحذف!',
+                                        text: 'تم حذف السجل بنجاح.',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                    setTimeout(() => location.reload(), 1500);
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'خطأ!',
+                                        text: response.message || 'حدث خطأ أثناء الحذف.'
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'خطأ!',
+                                    text: 'لم يتم الاتصال بالخادم.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

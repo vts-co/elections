@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Election.Dto.UserVoterAttendanceReportViewModel>
+@using Election.Utilities
+
+@{
+    ViewBag.Title = "تقرير تسجيل حضور الناخبين حسب المستخدم";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row">
+            <h2 class="col">  </h2>
+            <p class="col-auto">
+            </p>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap w-100">
+            <thead >
+                <tr>
+                    <th>المستخدم</th>
+                    <th>عدد الناخبين المسجل حضورهم</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UserName</td>
+                        <td>@item.AttendedCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

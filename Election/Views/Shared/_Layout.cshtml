@@ -181,6 +181,18 @@
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="@Url.Action("Index", "Users")"><i class="bx bxs-report"></i>المستخدمين </a></li>
+                                <li><a href="@Url.Action("UserAttendanceReport", "Users")"><i class="bx bxs-report"></i>تقرير تسجيل حضور الناخبين حسب المستخدم </a></li>
+
+                            </ul>
+                        </li>   
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
+                                <i class="bx bxs-group"></i>                                <span data-key="t-Users">رصد نتائج المرشحين </span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="@Url.Action("Index", "Candidates")"><i class="bx bxs-report"></i>المرشحين </a></li>
+                                <li><a href="@Url.Action("Index", "RecordingResults")"><i class="bx bxs-report"></i>رصد النتائج </a></li>
+                                <li><a href="@Url.Action("Statistics", "RecordingResults")"><i class="bx bxs-report"></i>إحصاءات المرشحين </a></li>
 
                             </ul>
                         </li>

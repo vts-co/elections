@@ -18,6 +18,8 @@ namespace Election.Models
         public Nullable<int> CandidateId { get; set; }
         public int NumberOfVoters { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public bool IsDeleted { get; set; }
+        public Nullable<System.DateTime> DeletedOn { get; set; }
     
         public virtual Candidate Candidate { get; set; }
     }

@@ -11,7 +11,7 @@
 @using (Html.BeginForm("Create", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-
+    @Html.HiddenFor(x=>x.Id)
     <div class="card">
         <div class="card-header">
             <div class="row justify-content-between">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-            
+
 
 
 

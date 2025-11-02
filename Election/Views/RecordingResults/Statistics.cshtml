@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Election.Dto.CandidateDto>
+@{
+    ViewBag.Title = "إحصاءات المرشحين";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>إحصاءات المرشحين</h3>
+        <p class="text-center">
+            إجمالي عدد الناخبين:
+            <span class="badge bg-primary fs-5">@ViewBag.TotalVoters</span>
+        </p>
+    </div>
+    <div class="card-body">
+        <table id="datatable" class="table table-hover table-bordered dt-responsive nowrap w-100">
+            <thead >
+                <tr>
+                    <th>الترتيب</th>
+                    <th>المرشح</th>
+                    <th>عدد الناخبين</th>
+                    <th>النسبة %</th>
+                </tr>
+            </thead>
+            <tbody class="table-primary">
+                @{
+                    int rank = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle">@rank</td>
+                            <td class="align-middle">@item.CandidateName</td>
+                            <td class="align-middle">@item.TotalVoters</td>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2">@item.Percentage %</span>
+                                    <div class="progress flex-grow-1" style="height: 15px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: @item.Percentage%" aria-valuenow="@item.Percentage" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        rank++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+    </script>
+}
