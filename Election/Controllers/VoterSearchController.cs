@@ -52,7 +52,7 @@ namespace Election.Controllers
                 query = query.Where(v => v.School == filterSchool);
 
             if (!string.IsNullOrWhiteSpace(filterName))
-                query = query.Where(v => v.Name.Contains(filterName));
+                query = query.Where(v => v.Name.StartsWith((filterName)));
 
             if (!string.IsNullOrWhiteSpace(filterSubcommittee))
                 query = query.Where(v => v.SubCommitteeNumber.Contains(filterSubcommittee));
@@ -68,12 +68,15 @@ namespace Election.Controllers
 
             if (!string.IsNullOrWhiteSpace(searchValue))
             {
+                searchValue = searchValue.Trim().ToLower();
                 query = query.Where(v =>
                     v.Name.Contains(searchValue) ||
                     v.School.Contains(searchValue) ||
                     v.Village.Contains(searchValue) ||
                     v.Center.Contains(searchValue));
             }
+
+
 
             var recordsTotal = db.VoterInfoes.Count();
             var recordsFiltered = query.Count();
