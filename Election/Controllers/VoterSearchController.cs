@@ -39,6 +39,7 @@ namespace Election.Controllers
             var filterName = Request.Form["name"] ?? string.Empty;
             var filterSubcommittee = Request.Form["Subcommittee"] ?? string.Empty;
             var AttendFilter = Request.Form["AttendFilter"] ?? string.Empty;
+            var farm = Request.Form["Farm"] ?? string.Empty;
 
             var query = db.VoterInfoes.AsQueryable();
 
@@ -57,6 +58,8 @@ namespace Election.Controllers
             if (!string.IsNullOrWhiteSpace(filterSubcommittee))
                 query = query.Where(v => v.SubCommitteeNumber.Contains(filterSubcommittee));
 
+            if (!string.IsNullOrWhiteSpace(farm))
+                query = query.Where(v => v.Farm.StartsWith((farm)));
             if (!string.IsNullOrWhiteSpace(AttendFilter))
             {
                 if (AttendFilter == "1")
@@ -96,7 +99,8 @@ namespace Election.Controllers
                     v.School,
                     IsAttent=v.IsAttent,
                     Subcommittee = v.SubCommitteeNumber,
-                    Attent = v.IsAttent ? "تم الحضور" : "لم يتم الحضور"
+                    Attent = v.IsAttent ? "تم الحضور" : "لم يتم الحضور",
+                    Farm=v.Farm
                 })
                 .ToList();
 
@@ -109,7 +113,7 @@ namespace Election.Controllers
                 data = data
             }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult ExportToExcel(string center, string village, string school)
+        public ActionResult ExportToExcel(string center, string village, string school,string farm)
         {
             var query = db.VoterInfoes.AsQueryable();
 
@@ -121,6 +125,9 @@ namespace Election.Controllers
 
             if (!string.IsNullOrEmpty(school))
                 query = query.Where(v => v.School == school);
+            
+            if (!string.IsNullOrEmpty(farm))
+                query = query.Where(v => v.Farm == farm);
 
             var data = query
                 .Select(v => new
@@ -136,16 +143,14 @@ namespace Election.Controllers
 
             // إنشاء DataTable لتعبئته في الإكسل
             DataTable dt = new DataTable("الناخبين");
-            dt.Columns.Add("المسلسل");
             dt.Columns.Add("الاسم");
-            dt.Columns.Add("المركز");
-            dt.Columns.Add("القرية");
-            dt.Columns.Add("المدرسة");
+           
+            
             dt.Columns.Add("الحضور");
 
             foreach (var item in data)
             {
-                dt.Rows.Add(item.Serial,item.Name, item.Center, item.Village, item.School, item.Attendance);
+                dt.Rows.Add(item.Name, item.Attendance);
             }
 
             // إنشاء ملف الإكسل
@@ -193,6 +198,17 @@ namespace Election.Controllers
                 var schools = db.VoterInfoes
                     .Where(v => v.Village == village)
                     .Select(v => v.School)
+                    .Distinct()
+                    .OrderBy(s => s)
+                    .ToList();
+
+                return Json(schools, JsonRequestBehavior.AllowGet);
+            }
+            public JsonResult GetfarmSchools(string village)
+            {
+                var schools = db.VoterInfoes
+                    .Where(v => v.Village == village)
+                    .Select(v => v.Farm)
                     .Distinct()
                     .OrderBy(s => s)
                     .ToList();

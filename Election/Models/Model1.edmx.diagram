@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="40e25e1bcb4d4b49834ff29018450b8a" Name="Diagram1">
-        <EntityTypeShape EntityType="ElectionsDbModel.Candidate" Width="1.5" PointX="5.75" PointY="1.125" />
-        <EntityTypeShape EntityType="ElectionsDbModel.CandidatesStatistic" Width="1.5" PointX="8" PointY="1" />
-        <EntityTypeShape EntityType="ElectionsDbModel.User" Width="1.5" PointX="0.75" PointY="1.125" />
-        <EntityTypeShape EntityType="ElectionsDbModel.VoterInfo" Width="1.5" PointX="3" PointY="1" />
-        <AssociationConnector Association="ElectionsDbModel.FK_CandidatesStatistics_Candidates" />
-        <AssociationConnector Association="ElectionsDbModel.FK_VoterInfo_Users" />
+      <Diagram DiagramId="d652cac16dde409882c55f193237ed37" Name="Diagram1">
+        <EntityTypeShape EntityType="electionDbModel.Candidate" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="electionDbModel.CandidatesStatistic" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="electionDbModel.User" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="electionDbModel.VoterInfo" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="electionDbModel.FK_CandidatesStatistics_Candidates" ManuallyRouted="false" />
+        <AssociationConnector Association="electionDbModel.FK_VoterInfo_Users" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

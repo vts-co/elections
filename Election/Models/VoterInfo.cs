@@ -24,6 +24,7 @@ namespace Election.Models
         public string Center { get; set; }
         public bool IsAttent { get; set; }
         public Nullable<int> AttendBy { get; set; }
+        public string Farm { get; set; }
     
         public virtual User User { get; set; }
     }
