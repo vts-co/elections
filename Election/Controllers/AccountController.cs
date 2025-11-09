@@ -96,6 +96,7 @@ namespace Election.Controllers
 
             }
             return View(new SignInVM());
+
         }
 
         [HttpPost]
