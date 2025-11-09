@@ -27,6 +27,10 @@ namespace Election.Controllers
         public ActionResult Create()
         {
             ViewBag.CandidateId = new SelectList(db.Candidates.Where(x=>!x.IsDeleted), "Id", "Name");
+            ViewBag.Centers = db.VoterInfoes.Select(v => v.Center).Distinct().OrderBy(x => x).ToList();
+            ViewBag.Villages = db.VoterInfoes.Select(v => v.Village).Distinct().OrderBy(x => x).ToList();
+            ViewBag.Schools = db.VoterInfoes.Select(v => v.School).Distinct().OrderBy(x => x).ToList();
+
             return View(new CandidatesStatistic { Date=DateTime.Now});
         }
 

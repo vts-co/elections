@@ -88,7 +88,13 @@ namespace Election.Controllers
         public ActionResult SignIn()
         {
             var pass = Security.Encrypt("Ybewfc1654#GFaqw");
+            using (var dbContext = new ElectionsDbEntities())
+            {
+                var user = dbContext.Users.FirstOrDefault(x=>x.UserName=="Admin").Password ;
+                var usewwr = dbContext.Users.FirstOrDefault(x => x.UserName == "Admin").UserName ;
+                var pass11 = Security.Decrypt(user);
 
+            }
             return View(new SignInVM());
         }
 

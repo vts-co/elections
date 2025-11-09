@@ -20,6 +20,7 @@ namespace Election.Models
         public Nullable<System.DateTime> Date { get; set; }
         public bool IsDeleted { get; set; }
         public Nullable<System.DateTime> DeletedOn { get; set; }
+        public string School { get; set; }
     
         public virtual Candidate Candidate { get; set; }
     }

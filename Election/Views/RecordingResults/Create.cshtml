@@ -28,22 +28,40 @@
 
                 @Html.AntiForgeryToken()
 
+                <div class="col-md-3">
+                    <label>المركز</label>
+                    <select id="center" class="form-control">
+                        <option value="">-- كل المراكز --</option>
+                        @foreach (var c in ViewBag.Centers as List<string>)
+                        {
+                            <option value="@c">@c</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label>القرية</label>
+                    <select id="village" class="form-control">
+                        <option value="">-- كل القرى --</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-6">
+                    <label>المدرسة</label>
+                    <select id="school" class="form-control">
+                        <option value="">-- كل المدارس --</option>
+                    </select>
+                </div>
                 <div class="form-group mb-3 col-sm-6">
-                    @Html.Label("التاريخ ", htmlAttributes: new { @class = "control-label" })
+                    @Html.Label("المرشح ", htmlAttributes: new { @class = "control-label" })
                     <div class="col-12">
-                        @Html.TextBoxFor(model => model.Date, "{0:yyyy-MM-dd}", htmlAttributes: new { @class = "form-control", type = "date", required = "required" })
+                        @Html.DropDownListFor(m => m.CandidateId, (SelectList)ViewBag.CandidateId, "اختر مرشح", new { @class = "form-control", required = "required" })
 
                     </div>
                 </div>
-                      <div class="form-group mb-3 col-sm-6">
-                    @Html.Label("المرشح ", htmlAttributes: new { @class = "control-label" })
-                          <div class="col-12">
-                              @Html.DropDownListFor(m => m.CandidateId, (SelectList)ViewBag.CandidateId, "اختر مرشح", new { @class = "form-control", required = "required" })
-
-                          </div>
-                </div>   
                 <div class="form-group mb-3 col-sm-6">
-                    @Html.Label("عدد الناخبين ", htmlAttributes: new { @class = "control-label" })
+                    @Html.Label("عدد الاصوات ", htmlAttributes: new { @class = "control-label" })
                     <div class="col-12">
                         @Html.TextBoxFor(m => m.NumberOfVoters, new { @class = "form-control", type = "number", min = "0", required = "required" })
 
@@ -51,7 +69,7 @@
                 </div>
 
 
-              
+
 
 
 
@@ -65,4 +83,58 @@
             </div>
         </div>
     </div>
+}
+@section scripts{
+    <script>
+$(document).ready(function () {
+
+
+  
+
+    // 🌳 تحديث القوائم عند اختيار المركز
+    $('#center').change(function () {
+        var center = $(this).val();
+        $('#village').empty().append('<option value="">-- كل القرى --</option>');
+        $('#school').empty().append('<option value="">-- كل المدارس --</option>');
+      
+        if (center) {
+            $.getJSON('@Url.Action("GetVillages", "VoterSearch")', { center: center }, function (data) {
+                $.each(data, function (i, village) {
+                    $('#village').append($('<option>', { value: village, text: village }));
+                });
+            });
+        }
+    });
+
+    // ✅ إظهار عمود العزبة فقط عند القرية المطلوبة
+    $('#village').change(function () {
+    var village = $(this).val();
+    $('#school').empty().append('<option value="">-- كل المدارس --</option>');
+
+    
+        
+    // تحميل المدارس والعزب
+    if (village) {
+        $.getJSON('@Url.Action("GetSchools", "VoterSearch")', { village: village }, function (data) {
+            $.each(data, function (i, school) {
+                $('#school').append($('<option>', { value: school, text: school }));
+            });
+        });
+
+       
+    }
+
+    // إعادة تحميل الجدول بعد التغيير
+    //table.ajax.reload();
+});
+
+ 
+
+});
+        // ✅ زر تسجيل الحضور داخل المودال (Popup)
+
+
+    </script>
+
+
 }

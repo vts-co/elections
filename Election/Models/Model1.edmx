@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="electionDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="electionDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Candidates">
           <Key>
             <PropertyRef Name="Id" />
@@ -24,6 +24,7 @@
           <Property Name="Date" Type="datetime" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="School" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -93,11 +94,24 @@
             <End Role="VoterInfo" EntitySet="VoterInfo" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="electionDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="electionDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Candidates" EntityType="electionDbModel.Candidate" />
+          <EntitySet Name="CandidatesStatistics" EntityType="electionDbModel.CandidatesStatistic" />
+          <EntitySet Name="Users" EntityType="electionDbModel.User" />
+          <EntitySet Name="VoterInfoes" EntityType="electionDbModel.VoterInfo" />
+          <AssociationSet Name="FK_CandidatesStatistics_Candidates" Association="electionDbModel.FK_CandidatesStatistics_Candidates">
+            <End Role="Candidate" EntitySet="Candidates" />
+            <End Role="CandidatesStatistic" EntitySet="CandidatesStatistics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VoterInfo_Users" Association="electionDbModel.FK_VoterInfo_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="VoterInfo" EntitySet="VoterInfoes" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Candidate">
           <Key>
             <PropertyRef Name="Id" />
@@ -106,7 +120,7 @@
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="DeletedOn" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="CandidatesStatistics" Relationship="Self.FK_CandidatesStatistics_Candidates" FromRole="Candidates" ToRole="CandidatesStatistics" />
+          <NavigationProperty Name="CandidatesStatistics" Relationship="electionDbModel.FK_CandidatesStatistics_Candidates" FromRole="Candidate" ToRole="CandidatesStatistic" />
         </EntityType>
         <EntityType Name="CandidatesStatistic">
           <Key>
@@ -118,7 +132,8 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="DeletedOn" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Candidate" Relationship="Self.FK_CandidatesStatistics_Candidates" FromRole="CandidatesStatistics" ToRole="Candidates" />
+          <Property Name="School" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Candidate" Relationship="electionDbModel.FK_CandidatesStatistics_Candidates" FromRole="CandidatesStatistic" ToRole="Candidate" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -133,7 +148,7 @@
           <Property Name="SchoolName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="DeletedOn" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="VoterInfoes" Relationship="Self.FK_VoterInfo_Users" FromRole="Users" ToRole="VoterInfo" />
+          <NavigationProperty Name="VoterInfoes" Relationship="electionDbModel.FK_VoterInfo_Users" FromRole="User" ToRole="VoterInfo" />
         </EntityType>
         <EntityType Name="VoterInfo">
           <Key>
@@ -150,25 +165,25 @@
           <Property Name="IsAttent" Type="Boolean" Nullable="false" />
           <Property Name="AttendBy" Type="Int32" />
           <Property Name="Farm" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_VoterInfo_Users" FromRole="VoterInfo" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="electionDbModel.FK_VoterInfo_Users" FromRole="VoterInfo" ToRole="User" />
         </EntityType>
         <Association Name="FK_CandidatesStatistics_Candidates">
-          <End Role="Candidates" Type="Self.Candidate" Multiplicity="0..1" />
-          <End Role="CandidatesStatistics" Type="Self.CandidatesStatistic" Multiplicity="*" />
+          <End Type="electionDbModel.Candidate" Role="Candidate" Multiplicity="0..1" />
+          <End Type="electionDbModel.CandidatesStatistic" Role="CandidatesStatistic" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Candidates">
+            <Principal Role="Candidate">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CandidatesStatistics">
+            <Dependent Role="CandidatesStatistic">
               <PropertyRef Name="CandidateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VoterInfo_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="VoterInfo" Type="Self.VoterInfo" Multiplicity="*" />
+          <End Type="electionDbModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="electionDbModel.VoterInfo" Role="VoterInfo" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="VoterInfo">
@@ -176,20 +191,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="electionDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Candidates" EntityType="Self.Candidate" />
-          <EntitySet Name="CandidatesStatistics" EntityType="Self.CandidatesStatistic" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="VoterInfoes" EntityType="Self.VoterInfo" />
-          <AssociationSet Name="FK_CandidatesStatistics_Candidates" Association="Self.FK_CandidatesStatistics_Candidates">
-            <End Role="Candidates" EntitySet="Candidates" />
-            <End Role="CandidatesStatistics" EntitySet="CandidatesStatistics" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VoterInfo_Users" Association="Self.FK_VoterInfo_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="VoterInfo" EntitySet="VoterInfoes" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -199,54 +200,55 @@
           <EntitySetMapping Name="Candidates">
             <EntityTypeMapping TypeName="electionDbModel.Candidate">
               <MappingFragment StoreEntitySet="Candidates">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CandidatesStatistics">
             <EntityTypeMapping TypeName="electionDbModel.CandidatesStatistic">
               <MappingFragment StoreEntitySet="CandidatesStatistics">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CandidateId" ColumnName="CandidateId" />
-                <ScalarProperty Name="NumberOfVoters" ColumnName="NumberOfVoters" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="School" ColumnName="School" />
                 <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="NumberOfVoters" ColumnName="NumberOfVoters" />
+                <ScalarProperty Name="CandidateId" ColumnName="CandidateId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="electionDbModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="Role" ColumnName="Role" />
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="VoterInfoes">
             <EntityTypeMapping TypeName="electionDbModel.VoterInfo">
               <MappingFragment StoreEntitySet="VoterInfo">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Serial" ColumnName="Serial" />
-                <ScalarProperty Name="SubCommitteeNumber" ColumnName="SubCommitteeNumber" />
-                <ScalarProperty Name="GeneralCommittee" ColumnName="GeneralCommittee" />
-                <ScalarProperty Name="School" ColumnName="School" />
-                <ScalarProperty Name="Village" ColumnName="Village" />
-                <ScalarProperty Name="Center" ColumnName="Center" />
-                <ScalarProperty Name="IsAttent" ColumnName="IsAttent" />
-                <ScalarProperty Name="AttendBy" ColumnName="AttendBy" />
                 <ScalarProperty Name="Farm" ColumnName="Farm" />
+                <ScalarProperty Name="AttendBy" ColumnName="AttendBy" />
+                <ScalarProperty Name="IsAttent" ColumnName="IsAttent" />
+                <ScalarProperty Name="Center" ColumnName="Center" />
+                <ScalarProperty Name="Village" ColumnName="Village" />
+                <ScalarProperty Name="School" ColumnName="School" />
+                <ScalarProperty Name="GeneralCommittee" ColumnName="GeneralCommittee" />
+                <ScalarProperty Name="SubCommitteeNumber" ColumnName="SubCommitteeNumber" />
+                <ScalarProperty Name="Serial" ColumnName="Serial" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
