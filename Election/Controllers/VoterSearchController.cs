@@ -134,9 +134,13 @@ namespace Election.Controllers
 
             if (!string.IsNullOrEmpty(school))
                 query = query.Where(v => v.School == school);
-            
+
             if (!string.IsNullOrEmpty(farm))
-                query = query.Where(v => v.Farm == farm);
+            {
+                var farmList = farm.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (farmList.Any())
+                    query = query.Where(v => farmList.Contains(v.Farm));
+            }
 
             var data = query
                 .Select(v => new

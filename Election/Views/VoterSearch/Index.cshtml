@@ -455,12 +455,14 @@ $('#votersTable').on('click', '.btn-details', function (e) {
     });
 
     // داخل $(document).ready(...)
-$('#btnExportExcel').on('click', function () {
+    $('#btnExportExcel').on('click', function () {
+        var selectedFarms = $('#farm').val() || []; // مصفوفة من القيم المختارة
+
     var url = '@Url.Action("ExportToExcel", "VoterSearch")' +
         '?center=' + encodeURIComponent($('#center').val() || '') +
         '&village=' + encodeURIComponent($('#village').val() || '') +
         '&school=' + encodeURIComponent($('#school').val() || '') +
-        '&farm=' + encodeURIComponent($('#farm').val() || '') +
+        '&farm=' + encodeURIComponent(selectedFarms.join(',')) + // هنا التعديل المهم
         '&attendFilter=' + encodeURIComponent($('#AttendFilter').val() || '') +
         '&subcommittee=' + encodeURIComponent($('#Subcommittee').val() || '') +
         '&name=' + encodeURIComponent($('#name').val() || '');
