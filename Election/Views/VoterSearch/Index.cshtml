@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-3">
                 <label>المركز</label>
-                <select id="center" class="form-control">
+                <select id="center" class="form-control ">
                     <option value="">-- كل المراكز --</option>
                     @foreach (var c in ViewBag.Centers as List<string>)
                     {
@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-6" style="display:none;">
                 <label>العزبة</label>
-                <select id="farm" class="form-control">
+                <select  id="farm" class="form-control "multiple>
                     <option value="">-- كل العزب --</option>
                 </select>
             </div>
@@ -152,7 +152,7 @@ var table = $('#votersTable').DataTable({
             d.center = $('#center').val();
             d.village = $('#village').val();
             d.school = $('#school').val();
-            d.farm = $('#farm').val();
+            d.farm = ($('#farm').val() || []).join(','); // string: "1,2,3"
             d.name = $('#name').val();
             d.Subcommittee = $('#Subcommittee').val();
             d.AttendFilter = $('#AttendFilter').val();

@@ -39,7 +39,12 @@ namespace Election.Controllers
             var filterName = Request.Form["name"] ?? string.Empty;
             var filterSubcommittee = Request.Form["Subcommittee"] ?? string.Empty;
             var AttendFilter = Request.Form["AttendFilter"] ?? string.Empty;
-            var farm = Request.Form["Farm"] ?? string.Empty;
+            // قراءة قيم farm كـ CSV
+            var farmCsv = Request.Form["farm"] ?? "";
+            var farmList = farmCsv.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            
+
 
             var query = db.VoterInfoes.AsQueryable();
 
@@ -58,8 +63,12 @@ namespace Election.Controllers
             if (!string.IsNullOrWhiteSpace(filterSubcommittee))
                 query = query.Where(v => v.SubCommitteeNumber.Contains(filterSubcommittee));
 
-            if (!string.IsNullOrWhiteSpace(farm))
-                query = query.Where(v => v.Farm.StartsWith((farm)));
+            if (farmList.Any())
+            {
+                query = query.Where(v => farmList.Contains(v.Farm));
+            }
+
+
             if (!string.IsNullOrWhiteSpace(AttendFilter))
             {
                 if (AttendFilter == "1")
