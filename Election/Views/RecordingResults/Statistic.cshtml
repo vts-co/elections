@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "احصائيات الناخبين";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <div class="row">
+            <h2 class="col"> @ViewBag.Title </h2>
+            <p class="col-auto">
+            </p>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label>المركز</label>
+                @Html.DropDownList("CenterFilter", (SelectList)ViewBag.Centers, "-- كل المراكز --", new { @class = "form-control", id = "centerFilter" })
+            </div>
+            <div class="col-md-3">
+                <label>القرية</label>
+                @Html.DropDownList("VillageFilter", (SelectList)ViewBag.Villages, "-- كل القرى --", new { @class = "form-control", id = "villageFilter" })
+            </div>
+            <div class="col-md-4">
+                <label>المدرسة</label>
+                @Html.DropDownList("SchoolFilter", (SelectList)ViewBag.Schools, "-- كل المدارس --", new { @class = "form-control", id = "schoolFilter" })
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-primary" id="btnFilter">بحث</button>
+            </div>
+        </div>
+
+        <canvas id="votesChart" height="150"></canvas>
+
+
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
+$(document).ready(function(){
+
+    let votesChart;
+
+    function getGradientColors(count) {
+        const colors = [];
+        for(let i = 0; i < count; i++) {
+            const hue = Math.floor((i * 360) / count);
+            colors.push(`hsl(${hue}, 70%, 50%)`);
+        }
+        return colors;
+    }
+
+  function loadChart(center = '', village = '', school = ''){
+    $.getJSON('@Url.Action("GetCandidatesVotes")', { center, village, school }, function(data){
+        const votes = data.map(d => d.Votes);
+        const totalVotes = votes.reduce((a,b) => a+b, 0);
+
+        // إنشاء أسماء المرشحين مع العدد والنسبة
+        const labels = data.map(d => {
+            const perc = ((d.Votes / totalVotes) * 100).toFixed(1);
+            return `${d.CandidateName} (${d.Votes} - ${perc}%)`;
+        });
+
+        const ctx = document.getElementById('votesChart').getContext('2d');
+
+        if(votesChart) votesChart.destroy();
+
+        const backgroundColors = getGradientColors(votes.length);
+
+        votesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'عدد الأصوات',
+                    data: votes,
+                    backgroundColor: backgroundColors,
+                    borderRadius: 5,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }, // ممكن نخلي legend مخفي لأنه الأسماء والبيانات معروضة على المحور X
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context){
+                                const perc = ((context.parsed.y / totalVotes) * 100).toFixed(1);
+                                return `${context.parsed.y} أصوات (${perc}%)`;
+                            }
+                        }
+                    },
+                    datalabels: { display: false } // نخفي الداتا ليبلز فوق الأعمدة لأنها موجودة جنب الاسم
+                },
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { ticks: { autoSkip: false } }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    });
+}
+
+//    loadChart();
+
+    $('#btnFilter').click(function(){
+        const center = $('#centerFilter').val();
+        const village = $('#villageFilter').val();
+        const school = $('#schoolFilter').val();
+        loadChart(center, village, school);
+    });
+
+});
+    </script>
+}
+
+

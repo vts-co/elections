@@ -1951,6 +1951,7 @@
     <Content Include="Views\RecordingResults\Edit.cshtml" />
     <Content Include="Views\RecordingResults\Statistics.cshtml" />
     <Content Include="Views\Users\UserAttendanceReport.cshtml" />
+    <Content Include="Views\RecordingResults\Statistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

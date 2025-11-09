@@ -49,9 +49,8 @@
 
                 <div class="col-md-6">
                     <label>المدرسة</label>
-                    <select id="school" class="form-control">
-                        <option value="">-- كل المدارس --</option>
-                    </select>
+                    @Html.DropDownListFor(m => m.School, new SelectList(Enumerable.Empty<string>()), "-- كل المدارس --", new { @class = "form-control", id = "School" })
+
                 </div>
                 <div class="form-group mb-3 col-sm-6">
                     @Html.Label("المرشح ", htmlAttributes: new { @class = "control-label" })
@@ -95,7 +94,7 @@ $(document).ready(function () {
     $('#center').change(function () {
         var center = $(this).val();
         $('#village').empty().append('<option value="">-- كل القرى --</option>');
-        $('#school').empty().append('<option value="">-- كل المدارس --</option>');
+        $('#School').empty().append('<option value="">-- كل المدارس --</option>');
       
         if (center) {
             $.getJSON('@Url.Action("GetVillages", "VoterSearch")', { center: center }, function (data) {
@@ -109,15 +108,15 @@ $(document).ready(function () {
     // ✅ إظهار عمود العزبة فقط عند القرية المطلوبة
     $('#village').change(function () {
     var village = $(this).val();
-    $('#school').empty().append('<option value="">-- كل المدارس --</option>');
+    $('#School').empty().append('<option value="">-- كل المدارس --</option>');
 
     
         
     // تحميل المدارس والعزب
     if (village) {
         $.getJSON('@Url.Action("GetSchools", "VoterSearch")', { village: village }, function (data) {
-            $.each(data, function (i, school) {
-                $('#school').append($('<option>', { value: school, text: school }));
+            $.each(data, function (i, School) {
+                $('#School').append($('<option>', { value: School, text: School }));
             });
         });
 

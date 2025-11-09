@@ -35,8 +35,8 @@
         <table id="datatable" class="table table-striped dt-responsive  nowrap w-100">
             <thead>
                 <tr>
-                    <th>التاريخ</th>
                     <th>المرشح</th>
+                    <th>المدرسة</th>
                     <th>عدد الناخبين</th>
                     <th></th>
                 </tr>
@@ -45,8 +45,8 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Date.Value.ToString("yyyy-MM-dd")</td>
                         <td>@item.Candidate.Name</td>
+                        <td>@item.School</td>
                         <td>@item.NumberOfVoters</td>
                         <td>
                             <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-warning">

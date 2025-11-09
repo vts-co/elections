@@ -26,14 +26,23 @@
 
             <div class="row">
 
+                @Html.AntiForgeryToken()
 
-                <div class="form-group mb-3 col-sm-6">
-                    @Html.Label("التاريخ ", htmlAttributes: new { @class = "control-label" })
-                    <div class="col-12">
-                        @Html.TextBoxFor(model => model.Date, "{0:yyyy-MM-dd}", htmlAttributes: new { @class = "form-control", type = "date", required = "required" })
-
-                    </div>
+                <div class="col-md-3">
+                    <label>المركز</label>
+                    @Html.DropDownList("Center", (SelectList)ViewBag.Centers, "-- اختر المركز --", new { @class = "form-control", id = "center" })
                 </div>
+
+                <div class="col-md-3">
+                    <label>القرية</label>
+                    @Html.DropDownList("Village", (SelectList)ViewBag.Villages, "-- اختر القرية --", new { @class = "form-control", id = "village" })
+                </div>
+
+                <div class="col-md-6">
+                    <label>المدرسة</label>
+                    @Html.DropDownListFor(m => m.School, (SelectList)ViewBag.Schools, "-- اختر المدرسة --", new { @class = "form-control", id = "School" })
+                </div>
+
                 <div class="form-group mb-3 col-sm-6">
                     @Html.Label("المرشح ", htmlAttributes: new { @class = "control-label" })
                     <div class="col-12">
@@ -42,7 +51,7 @@
                     </div>
                 </div>
                 <div class="form-group mb-3 col-sm-6">
-                    @Html.Label("عدد الناخبين ", htmlAttributes: new { @class = "control-label" })
+                    @Html.Label("عدد الاصوات ", htmlAttributes: new { @class = "control-label" })
                     <div class="col-12">
                         @Html.TextBoxFor(m => m.NumberOfVoters, new { @class = "form-control", type = "number", min = "0", required = "required" })
 
@@ -64,4 +73,59 @@
             </div>
         </div>
     </div>
+}
+@section scripts{
+    <script>
+$(document).ready(function () {
+
+    // ✅ القيم الجاهزة من السيرفر (اللي اختارها المستخدم قبل كده)
+    var selectedCenter = '@ViewBag.SelectedCenter';
+    var selectedVillage = '@ViewBag.SelectedVillage';
+    var selectedSchool = '@ViewBag.SelectedSchool';
+
+    // 🔹 لما المستخدم يختار مركز
+    $('#center').change(function () {
+        var center = $(this).val();
+        $('#village').empty().append('<option value="">-- كل القرى --</option>');
+        $('#School').empty().append('<option value="">-- كل المدارس --</option>');
+
+        if (center) {
+            $.getJSON('@Url.Action("GetVillages", "VoterSearch")', { center: center }, function (data) {
+                $.each(data, function (i, village) {
+                    $('#village').append($('<option>', { value: village, text: village }));
+                });
+
+                // لو عندي قرية محفوظة مسبقًا، اختارها
+                if (selectedVillage) {
+                    $('#village').val(selectedVillage).trigger('change');
+                }
+            });
+        }
+    });
+
+    // 🔹 لما المستخدم يختار قرية
+    $('#village').change(function () {
+        var village = $(this).val();
+        $('#School').empty().append('<option value="">-- كل المدارس --</option>');
+
+        if (village) {
+            $.getJSON('@Url.Action("GetSchools", "VoterSearch")', { village: village }, function (data) {
+                $.each(data, function (i, School) {
+                    $('#School').append($('<option>', { value: School, text: School }));
+                });
+
+                // لو عندي مدرسة محفوظة مسبقًا، اختارها
+                if (selectedSchool) {
+                    $('#School').val(selectedSchool);
+                }
+            });
+        }
+    });
+
+    // ✅ عند فتح الصفحة أول مرة
+    if (selectedCenter) {
+        $('#center').val(selectedCenter).trigger('change');
+    }
+});
+    </script>
 }
